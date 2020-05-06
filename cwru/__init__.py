@@ -17,7 +17,9 @@ class CWRU:
             print "wrong rpm value: {}".format(rpm)
             exit(1)
         # root directory of all data
-        rdir = os.path.join(os.path.expanduser('~'), 'Datasets/CWRU')
+        rdir = os.path.join('Datasets/CWRU',
+                            exp,
+                            rpm)
 
         fmeta = os.path.join(os.path.dirname(__file__), 'metadata.txt')
         all_lines = open(fmeta).readlines()
@@ -46,7 +48,12 @@ class CWRU:
 
     def _download(self, fpath, link):
         print "Downloading to: '{}'".format(fpath)
-        urllib.URLopener().retrieve(link, fpath)
+        with open(file_name, "wb") as file:
+            # get request
+            response = get(url)
+            # write to file
+            file.write(response.content)
+        #urllib.URLopener().retrieve(link, fpath)
 
     def _load_and_slice_data(self, rdir, infos):
         self.X_train = np.zeros((0, self.length))
